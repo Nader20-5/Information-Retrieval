@@ -14,6 +14,10 @@ def rank_documents(matched_docs, query_terms, tfidf_matrix):
     # 1. Convert Query to TF-IDF Vector
     # The query vector will be aligned with the rows (terms) of the TFIDF matrix.
     query_vector = query_to_tfidf_vector(query_terms, tfidf_matrix)
+
+    # --- UPDATE: PRINT QUERY VECTOR ---
+    print("\n[Query Vector]:")
+    print(query_vector)
     
     if np.sum(query_vector) == 0:
         print("Warning: Query terms not found in the corpus vocabulary.")
@@ -21,15 +25,36 @@ def rank_documents(matched_docs, query_terms, tfidf_matrix):
 
     similarity_scores = {}
     
+    print("\n" + "="*80)
+    print(f"{'DOCUMENT VECTOR DETAILS':^80}")
+    print("="*80)
+    print(f"{'DocID':<15} | {'Length (Magnitude)':<25} | {'Cosine Similarity':<20}")
+    print("-" * 80)
+
     # 2. Calculate Similarity for Each Matched Document
     for doc_id in matched_docs:
         # Get the document vector (column) from the TFIDF matrix
         # Use .values to get the numpy array representation
         doc_vector = tfidf_matrix[doc_id].values
         
+        # Calculate Magnitude (Length) for display
+        doc_magnitude = np.linalg.norm(doc_vector)
+        
         # Calculate score
         score = calculate_cosine_similarity(query_vector, doc_vector)
         similarity_scores[doc_id] = score
+        
+        # Optimized Table Row
+        print(f"{doc_id:<15} | {doc_magnitude:<25.4f} | {score:.4f}")
+        
+        # Normalized Vector Output - Formatted nicely
+        normalized_vec = doc_vector / doc_magnitude if doc_magnitude > 0 else doc_vector
+        norm_vec_str = np.array2string(normalized_vec, formatter={'float_kind':lambda x: "%.4f" % x}, max_line_width=1000, separator=', ')
+        
+        print(f"   -> Normalized Vector: {norm_vec_str}\n")
+        print("-" * 80)
+
+    print("="*80 + "\n")
 
     # 3. Create Final Ranking Table
     ranking_df = pd.DataFrame(
@@ -53,7 +78,7 @@ def create_visualizations(ranking_df, tfidf_matrix, query_terms):
     plt.xlabel("Document ID")
     plt.ylabel("Cosine Similarity Score")
     plt.title("Top Matching Documents by Similarity Score")
-    plt.show() # 
+    # plt.show() # Commented out to prevent blocking 
     
     
 # --- MAIN EXECUTION (Used for individual testing/deliverable) ---

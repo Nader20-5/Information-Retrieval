@@ -48,9 +48,10 @@ def TF_IDF_Matrix(tf_matrix):
     # 3. Calculate IDF
     idf_values = np.log10(N / df_counts)
     
-    idf_df = pd.DataFrame(idf_values, columns=['IDF'])
+    # Create DF & IDF DataFrame
+    idf_df = pd.DataFrame({'DF': df_counts, 'IDF': idf_values})
     
-    print("\n[Inverse Document Frequency (IDF) Values]:")
+    print("\n[Document Frequency (DF) & Inverse Document Frequency (IDF)]:")
     print(idf_df.to_string())
     print("-" * 40)
     
@@ -58,12 +59,36 @@ def TF_IDF_Matrix(tf_matrix):
     idf_df.to_csv('IDF_values.csv')
     print(">> 'IDF_values.csv' saved successfully.")
     
-    # 4. Create TF-IDF Matrix
+    # 4. Calculate Weighted TF (W-TF) -> 1 + log(TF)
+    # Apply 1 + log10(tf) where tf > 0
+    w_tf_matrix = tf_matrix.applymap(lambda x: 1 + np.log10(x) if x > 0 else 0)
+    
+    print("\n[Weighted Term Frequency (W-TF) Matrix (1 + log10(tf))]:")
+    print(w_tf_matrix.to_string())
+    print("-" * 40)
+
+    # 5. Create TF-IDF Matrix (Using W-TF * IDF is standard, or TF * IDF?)
+    # Based on previous code: tfidf_matrix = tf_matrix.multiply(idf_values, axis=0) -> It used raw TF.
+    # Standard IR often uses W-TF * IDF. I will stick to RAW TF * IDF as per original implementation unless standard implied otherwise.
+    # However, user asked for "w tf" specifically. Let's provide that display.
+    # CAUTION: Original code used (tf * idf). I will KEEP that logic for the final matrix 
+    # unless instructed to change the SEARCH logic. 
+    # I will just DISPLAY W-TF as requested.
+    
     tfidf_matrix = tf_matrix.multiply(idf_values, axis=0)
     
     # --- UPDATE: PRINT FULL TF-IDF MATRIX TO TERMINAL ---
     print("\n[TF-IDF Matrix]:")
     print(tfidf_matrix.to_string())
+    print("-" * 40)
+
+    # 6. Calculate Document Vector Lengths
+    # Length = Sqrt(Sum(weight^2)) for each document column
+    doc_lengths = np.linalg.norm(tfidf_matrix, axis=0)
+    doc_lengths_df = pd.DataFrame(doc_lengths, index=tfidf_matrix.columns, columns=['Vector Length'])
+    
+    print("\n[Document Vector Lengths]:")
+    print(doc_lengths_df.to_string())
     print("-" * 40)
     
     # Save TF-IDF to CSV
