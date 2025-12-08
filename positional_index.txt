@@ -1,0 +1,15 @@
+< angels Doc7: 1; Doc8: 1; Doc9: 1 >
+< antony Doc1: 1; Doc2: 1; Doc6: 1 >
+< brutus Doc1: 2; Doc2: 2; Doc4: 1 >
+< caeser Doc1: 3; Doc2: 3; Doc4: 2; Doc5: 1; Doc6: 2 >
+< calpurnia Doc2: 4 >
+< cleopatra Doc1: 4 >
+< fear Doc7: 3; Doc8: 3; Doc10: 2 >
+< fools Doc7: 2; Doc8: 2; Doc9: 2; Doc10: 1 >
+< in Doc7: 4; Doc8: 4; Doc9: 3; Doc10: 3 >
+< mercy Doc1: 5; Doc3: 1; Doc4: 3; Doc5: 2; Doc6: 3 >
+< rush Doc7: 5; Doc8: 5; Doc9: 4; Doc10: 4 >
+< to Doc7: 6; Doc8: 6; Doc9: 5; Doc10: 5 >
+< tread Doc7: 7; Doc8: 7; Doc9: 6; Doc10: 6 >
+< where Doc7: 8; Doc8: 8; Doc9: 7; Doc10: 7 >
+< worser Doc1: 6; Doc3: 2; Doc4: 4; Doc5: 3 >
