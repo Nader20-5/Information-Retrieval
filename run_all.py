@@ -9,9 +9,9 @@ from similarity_ranking import rank_documents, load_tfidf_matrix, create_visuali
 from ir_core_library import load_positional_index
 
 def run_full_pipeline():
-    print("\n" + "="*60)
-    print("STARTING FULL INFORMATION RETRIEVAL PIPELINE")
-    print("="*60)
+
+    print("\n\t\tSTARTING FULL INFORMATION RETRIEVAL PIPELINE\t\t\n")
+    
 
     # --- Step 1: Data Cleaning & Preprocessing ---
     print("\n>> STEP 1: CLEANING DATA...")
@@ -52,9 +52,8 @@ def run_full_pipeline():
             # Visualization is optional in a batch script, uncomment if needed
             # create_visualizations(final_ranking, tfidf_matrix, TEST_QUERY_TERMS)
             
-    print("\n" + "="*60)
-    print("PIPELINE EXECUTION COMPLETE")
-    print("="*60)
+
+    print("\n\t\tPIPELINE EXECUTION COMPLETE\t\t\n")
 
 if __name__ == "__main__":
     run_full_pipeline()
