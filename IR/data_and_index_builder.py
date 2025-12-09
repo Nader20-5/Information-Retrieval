@@ -58,7 +58,7 @@ def cleanData():
 
 #  Positional Index Builder
 def positionalIndex(df):
-    print("\n ------------Positional Index------------ ")
+    print("\n     Positional Index     \n")
     
     # Requirement: < term doc1: pos1, pos2; doc2: pos1... >
     grouped = df.groupby(['term', 'doc_id'])['position'].apply(list).reset_index()

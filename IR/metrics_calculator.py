@@ -5,9 +5,8 @@ import numpy as np
 
 # --- A. Build TF Matrix ---
 def TF_Matrix(df):
-    print("\n=======================================================")
-    print(" Term Frequency (TF) Calculation")
-    print("=======================================================")
+    print("\n\n"+"-"*40)
+    print("\n\t\tTerm Frequency (TF) Calculation\t\t\n")
     
     # Helper for numerical column sorting (Doc1, Doc2, Doc10...)
     def extract_doc_num(d):
@@ -34,13 +33,11 @@ def TF_Matrix(df):
 
 # --- B. IDF + TF-IDF Matrix ---
 def TF_IDF_Matrix(tf_matrix):
-    print("\n=======================================================")
-    print(" IDF & TF-IDF Calculation")
-    print("=======================================================")
+    print("\n IDF & TF-IDF Calculation\n")
     
     # 1. Calculate N (Total Documents)
     N = len(tf_matrix.columns)
-    print(f"Total Documents (N): {N}")
+    print(f"\nTotal Documents (N): {N}")
     
     # 2. Calculate DF (Document Frequency)
     df_counts = (tf_matrix > 0).sum(axis=1)
@@ -50,10 +47,9 @@ def TF_IDF_Matrix(tf_matrix):
     
     # Create DF & IDF DataFrame
     idf_df = pd.DataFrame({'DF': df_counts, 'IDF': idf_values})
-    
-    print("\n[Document Frequency (DF) & Inverse Document Frequency (IDF)]:")
+    print("\n[Document Frequency (DF) & Inverse Document Frequency (IDF)]:\n")
     print(idf_df.to_string())
-    print("-" * 40)
+    print("\n\n"+"-"*40)
     
     # Save IDF to CSV
     idf_df.to_csv('IDF_values.csv')
@@ -62,25 +58,17 @@ def TF_IDF_Matrix(tf_matrix):
     # 4. Calculate Weighted TF (W-TF) -> 1 + log(TF)
     # Apply 1 + log10(tf) where tf > 0
     w_tf_matrix = tf_matrix.applymap(lambda x: 1 + np.log10(x) if x > 0 else 0)
-    
-    print("\n[Weighted Term Frequency (W-TF) Matrix (1 + log10(tf))]:")
+    print("\n\n"+"-"*40)
+    print("\n[Weighted Term Frequency (W-TF) Matrix (1 + log10(tf))]:\n")
     print(w_tf_matrix.to_string())
-    print("-" * 40)
 
     # 5. Create TF-IDF Matrix (Using W-TF * IDF is standard, or TF * IDF?)
-    # Based on previous code: tfidf_matrix = tf_matrix.multiply(idf_values, axis=0) -> It used raw TF.
-    # Standard IR often uses W-TF * IDF. I will stick to RAW TF * IDF as per original implementation unless standard implied otherwise.
-    # However, user asked for "w tf" specifically. Let's provide that display.
-    # CAUTION: Original code used (tf * idf). I will KEEP that logic for the final matrix 
-    # unless instructed to change the SEARCH logic. 
-    # I will just DISPLAY W-TF as requested.
-    
     tfidf_matrix = tf_matrix.multiply(idf_values, axis=0)
     
     # --- UPDATE: PRINT FULL TF-IDF MATRIX TO TERMINAL ---
-    print("\n[TF-IDF Matrix]:")
+    print("\n\n"+"-"*40)
+    print("\n[TF-IDF Matrix]:\n")
     print(tfidf_matrix.to_string())
-    print("-" * 40)
 
     # 6. Calculate Document Vector Lengths
     # Length = Sqrt(Sum(weight^2)) for each document column
@@ -89,7 +77,15 @@ def TF_IDF_Matrix(tf_matrix):
     
     print("\n[Document Vector Lengths]:")
     print(doc_lengths_df.to_string())
-    print("-" * 40)
+    
+    # 7. Normalized TF-IDF Matrix
+    # Divide each column (document vector) by its length
+    # Using broadcasting: divide each column by the corresponding length
+    normalized_tfidf_matrix = tfidf_matrix.div(doc_lengths)
+    print("\n"+"-"*40)
+    print("\n[Normalized TF-IDF Matrix]:\n")
+    print(normalized_tfidf_matrix.to_string())
+    
     
     # Save TF-IDF to CSV
     tfidf_matrix.to_csv('TFIDF_matrix.csv')

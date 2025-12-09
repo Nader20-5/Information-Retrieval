@@ -23,9 +23,7 @@ def get_all_doc_ids(index):
 
 def main_search_loop(index ,tfidf_matrix):
     
-    print("\n=======================================================")
-    print("Phrase Query Processor & Boolean Logic)")
-    print("=======================================================")
+    print("\n(Phrase Query Processor & Boolean Logic)\n")
     
     all_docs = get_all_doc_ids(index)
 
